@@ -10,7 +10,7 @@
     "status": "active",
     "createdAt": "2025-09-21T12:56:14.481Z",
     "updatedAt": "2025-09-21T12:56:14.482Z",
-    "metadata.lastLogin": "2025-09-27T12:45:17.703Z",
+    "metadata.lastLogin": "2025-09-27T18:28:49.572Z",
     "metadata.loginCount": 1
   },
   {
@@ -57,6 +57,29 @@
     },
     "metadata": {
       "registrationDate": "2025-09-27T12:44:47.326Z",
+      "lastLogin": null,
+      "loginCount": 0
+    }
+  },
+  {
+    "id": "a9f751bb-40d6-4617-93ad-90aa19e6022b",
+    "email": "usuario791@exemplo.com",
+    "username": "user937",
+    "password": "$2a$12$1nxiOqgKxO.29auQAtIjF.JuiuZpbVhf/2MsjXQeVW6dE3LzZQNbu",
+    "firstName": "João",
+    "lastName": "Silva",
+    "role": "user",
+    "status": "active",
+    "profile": {
+      "bio": null,
+      "avatar": null,
+      "preferences": {
+        "theme": "light",
+        "language": "pt-BR"
+      }
+    },
+    "metadata": {
+      "registrationDate": "2025-09-27T18:28:37.326Z",
       "lastLogin": null,
       "loginCount": 0
     }

@@ -10,6 +10,18 @@ class ShoppingListDemo {
     async delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    // Helper to ask user input in terminal (returns a Promise)
+    async ask(question) {
+        const readline = require('readline');
+        const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+        return new Promise((resolve) => {
+            rl.question(question, (answer) => {
+                rl.close();
+                resolve(answer);
+            });
+        });
+    }
     
     async testHealth() {
         console.log('=== Testando Health Check ===');
@@ -93,16 +105,63 @@ class ShoppingListDemo {
             console.log('Categorias disponíveis:', categoriesResponse.data.data);
             
             // Listar itens de uma categoria
-            const category = categoriesResponse.data.data[0];
-            const itemsResponse = await axios.get(`${this.baseUrl}/api/items?category=${category}&limit=5`);
-            console.log(`Itens da categoria ${category}:`, itemsResponse.data.data.length);
-            
-            // Buscar um item específico
-            if (itemsResponse.data.data.length > 0) {
-                const itemId = itemsResponse.data.data[0].id;
-                const itemResponse = await axios.get(`${this.baseUrl}/api/items/${itemId}`);
-                console.log('Detalhes do primeiro item:', itemResponse.data.data.name);
+            const categories = categoriesResponse.data.data || [];
+            if (!Array.isArray(categories) || categories.length === 0) {
+                console.log('Nenhuma categoria disponível para busca.');
+                return false;
             }
+
+            let category;
+            if (process.stdin.isTTY) {
+                console.log('\nEscolha uma categoria:');
+                categories.forEach((c, i) => {
+                    // se c for objeto com nome, mostre o nome, senão mostre o valor
+                    const label = (c && typeof c === 'object') ? (c.name || JSON.stringify(c)) : String(c);
+                    console.log(`${i + 1}. ${label}`);
+                });
+
+                // Pergunta até receber uma opção válida ou 'c' para cancelar
+                while (true) {
+                    const ans = (await this.ask('\nDigite o número da categoria (ou C para cancelar): ')).trim();
+                    if (!ans) {
+                        console.log('Entrada vazia, tente novamente.');
+                        continue;
+                    }
+                    if (/^c$/i.test(ans)) {
+                        console.log('Busca cancelada pelo usuário.');
+                        return false;
+                    }
+                    const idx = parseInt(ans, 10);
+                    if (Number.isNaN(idx) || idx < 1 || idx > categories.length) {
+                        console.log('Opção inválida, digite o número correspondente à categoria.');
+                        continue;
+                    }
+                    const selected = categories[idx - 1];
+                    category = (selected && typeof selected === 'object') ? (selected.name || String(selected)) : String(selected);
+                    break;
+                }
+            } else {
+                category = categories[0];
+                console.log(`Usando categoria padrão: ${category}`);
+            }
+
+            const itemsResponse = await axios.get(`${this.baseUrl}/api/items?category=${encodeURIComponent(category)}&limit=5`);
+                const items = itemsResponse.data.data;
+                console.log(`Itens da categoria ${category}:`, items.length);
+
+                // Mostrar todos os itens retornados (forma resumida)
+                if (items.length > 0) {
+                    console.log('Detalhes dos itens:');
+                    items.forEach((it, i) => {
+                        const name = it.name || '(sem nome)';
+                        const id = it.id || '-';
+                        const brand = it.brand ? ` | Marca: ${it.brand}` : '';
+                        const unit = it.unit ? ` | Unidade: ${it.unit}` : '';
+                        const price = (it.averagePrice !== undefined && it.averagePrice !== null) ? ` | Preço médio: R$ ${it.averagePrice}` : '';
+                        const desc = it.description ? ` | ${it.description}` : '';
+                        console.log(`${i + 1}. ${name} (id: ${id})${brand}${unit}${price}${desc}`);
+                    });
+                }
             
             return true;
         } catch (error) {

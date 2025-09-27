@@ -441,12 +441,21 @@ class ItemService {
   // Get items (com filtros e paginação)
   async getItems(req, res) {
     try {
-      const { page = 1, limit = 10, category, active = true } = req.query;
+      const { page = 1, limit = 10, category, active } = req.query;
 
       const skip = (page - 1) * parseInt(limit);
 
       // Filtros NoSQL flexíveis
-      const filter = { active: active === "true" };
+      // Interpretar corretamente o parâmetro `active` que pode vir como string 'true'/'false' ou boolean.
+      // Comportamento padrão: filtrar apenas itens ativos quando `active` não é fornecido.
+      let activeFilter;
+      if (typeof active === 'undefined' || active === null) {
+        activeFilter = true; // default
+      } else {
+        activeFilter = String(active).toLowerCase() === 'true';
+      }
+
+      const filter = { active: activeFilter };
 
       // Filtrar por categoria
       if (category) {

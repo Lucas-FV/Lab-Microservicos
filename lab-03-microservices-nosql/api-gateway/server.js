@@ -279,12 +279,21 @@ class ApiGateway {
           serviceName === "item-service" &&
           targetPath.startsWith("/api/items")
         ) {
-          targetPath = targetPath.replace("/api/items", "");
+          // Special-case known item-service subpaths so they map to the correct internal endpoints
+          if (targetPath.startsWith("/api/items/categories")) {
+            targetPath = targetPath.replace("/api/items/categories", "/categories");
+          } else if (targetPath.startsWith("/api/items/search")) {
+            targetPath = targetPath.replace("/api/items/search", "/search");
+          } else {
+            // List or item-specific routes: /api/items -> /items, /api/items/:id -> /items/:id
+            targetPath = targetPath.replace("/api/items", "/items");
+          }
         } else if (
           serviceName === "list-service" &&
           targetPath.startsWith("/api/lists")
         ) {
-          targetPath = targetPath.replace("/api/lists", "");
+          // Keep the internal path /lists so the list-service routes are matched correctly
+          targetPath = targetPath.replace("/api/lists", "/lists");
         }
 
         const targetUrl = `${serviceUrl}${targetPath}`;
