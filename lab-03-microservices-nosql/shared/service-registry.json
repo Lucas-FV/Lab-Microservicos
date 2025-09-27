@@ -10,8 +10,22 @@
       "/users",
       "/search"
     ],
-    "registeredAt": "2025-09-21T21:33:35.010Z",
-    "lastHealthCheck": "2025-09-22T02:51:39.826Z",
+    "registeredAt": "2025-09-27T12:33:01.479Z",
+    "lastHealthCheck": "2025-09-27T12:51:31.795Z",
+    "healthy": true
+  },
+  "list-service": {
+    "url": "http://localhost:3002",
+    "version": "1.0.0",
+    "database": "JSON-NoSQL",
+    "endpoints": [
+      "/health",
+      "/lists",
+      "/lists/:id",
+      "/lists/:id/items/:itemId"
+    ],
+    "registeredAt": "2025-09-27T12:33:01.465Z",
+    "lastHealthCheck": "2025-09-27T12:51:31.765Z",
     "healthy": true
   }
 }

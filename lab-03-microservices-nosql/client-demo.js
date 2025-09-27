@@ -68,7 +68,7 @@ class ShoppingListDemo {
         try {
             // Primeiro tenta fazer login com o admin
             const loginData = {
-                identifier: 'admin@shopping.com',
+                identifier: 'admin@microservices.com',
                 password: 'admin123'
             };
             
@@ -270,8 +270,125 @@ class ShoppingListDemo {
         console.log(`- Service Registry: curl http://localhost:3000/registry`);
         console.log(`- API Gateway: curl http://localhost:3000/`);
     }
+
+    // Interactive menu for running individual tests or all of them
+    async showMenu() {
+        const readline = require('readline');
+
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+        });
+
+        const question = (q) => new Promise((resolve) => rl.question(q, resolve));
+
+        const options = [
+            'Testar Health Check',
+            'Testar Service Registry',
+            'Registrar Novo Usuário',
+            'Fazer Login (admin)',
+            'Navegar Itens',
+            'Buscar Itens (arroz)',
+            'Criar Lista',
+            'Adicionar Itens à Lista',
+            'Visualizar Lista',
+            'Testar Dashboard',
+            'Testar Busca Global',
+            'Executar Todos os Testes (sequencial)',
+            'Sair',
+        ];
+
+        let exit = false;
+        while (!exit) {
+            console.log('\n=== MENU INTERATIVO ===');
+            options.forEach((opt, i) => console.log(`${i + 1}. ${opt}`));
+
+            const ans = await question('\nEscolha uma opção (número): ');
+            const choice = parseInt(ans, 10);
+            if (Number.isNaN(choice) || choice < 1 || choice > options.length) {
+                console.log('Opção inválida, tente novamente.');
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    await this.testHealth();
+                    break;
+                case 2:
+                    await this.testRegistry();
+                    break;
+                case 3:
+                    await this.registerUser();
+                    break;
+                case 4:
+                    await this.loginUser();
+                    break;
+                case 5:
+                    await this.browseItems();
+                    break;
+                case 6:
+                    await this.searchItems();
+                    break;
+                case 7:
+                    if (!this.token) {
+                        console.log('Ação requer autenticação. Faça login ou registre um usuário primeiro.');
+                    } else {
+                        await this.createList();
+                    }
+                    break;
+                case 8:
+                    if (!this.token) {
+                        console.log('Ação requer autenticação. Faça login ou registre um usuário primeiro.');
+                    } else if (!this.listId) {
+                        console.log('Nenhuma lista criada. Execute "Criar Lista" antes.');
+                    } else {
+                        await this.addItemsToList();
+                    }
+                    break;
+                case 9:
+                    if (!this.token) {
+                        console.log('Ação requer autenticação. Faça login ou registre um usuário primeiro.');
+                    } else if (!this.listId) {
+                        console.log('Nenhuma lista criada. Execute "Criar Lista" antes.');
+                    } else {
+                        await this.viewList();
+                    }
+                    break;
+                case 10:
+                    if (!this.token) {
+                        console.log('Ação requer autenticação. Faça login ou registre um usuário primeiro.');
+                    } else {
+                        await this.testDashboard();
+                    }
+                    break;
+                case 11:
+                    if (!this.token) {
+                        console.log('Ação requer autenticação. Faça login ou registre um usuário primeiro.');
+                    } else {
+                        await this.testGlobalSearch();
+                    }
+                    break;
+                case 12:
+                    await this.runAllTests();
+                    break;
+                case 13:
+                    exit = true;
+                    break;
+                default:
+                    console.log('Opção não implementada');
+            }
+
+            // pequena pausa entre operações
+            await this.delay(500);
+        }
+
+        rl.close();
+        console.log('Saindo do menu.');
+    }
 }
 
-// Executa a demonstração
+// Executa o menu interativo quando chamado diretamente
 const demo = new ShoppingListDemo();
-demo.runAllTests().catch(console.error);
+if (require.main === module) {
+    demo.showMenu().catch(console.error);
+}

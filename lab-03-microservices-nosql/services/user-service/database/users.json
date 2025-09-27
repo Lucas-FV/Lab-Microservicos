@@ -9,7 +9,9 @@
     "role": "admin",
     "status": "active",
     "createdAt": "2025-09-21T12:56:14.481Z",
-    "updatedAt": "2025-09-21T12:56:14.482Z"
+    "updatedAt": "2025-09-21T12:56:14.482Z",
+    "metadata.lastLogin": "2025-09-27T12:45:17.703Z",
+    "metadata.loginCount": 1
   },
   {
     "id": "cb54b0f2-6667-4555-8e91-c23b2d69b1fa",
@@ -35,5 +37,28 @@
     },
     "createdAt": "2025-09-21T12:57:58.543Z",
     "updatedAt": "2025-09-21T12:57:58.543Z"
+  },
+  {
+    "id": "c9e6e819-c43f-416e-bec1-f8764133abf3",
+    "email": "usuario455@exemplo.com",
+    "username": "user694",
+    "password": "$2a$12$0eErSG55pj62LT00/PYHMeZwv1eKExBYVnIByo6UtG0juk0RbicMW",
+    "firstName": "João",
+    "lastName": "Silva",
+    "role": "user",
+    "status": "active",
+    "profile": {
+      "bio": null,
+      "avatar": null,
+      "preferences": {
+        "theme": "light",
+        "language": "pt-BR"
+      }
+    },
+    "metadata": {
+      "registrationDate": "2025-09-27T12:44:47.326Z",
+      "lastLogin": null,
+      "loginCount": 0
+    }
   }
 ]
