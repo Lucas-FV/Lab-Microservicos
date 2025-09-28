@@ -9,23 +9,23 @@
       "/lists/:id",
       "/lists/:id/items/:itemId"
     ],
-    "registeredAt": "2025-09-27T22:10:35.256Z",
-    "lastHealthCheck": "2025-09-27T23:52:06.789Z",
+    "registeredAt": "2025-09-28T13:00:56.304Z",
+    "lastHealthCheck": "2025-09-28T14:33:57.683Z",
     "healthy": true
   },
-  "item-service": {
-    "url": "http://localhost:3003",
+  "user-service": {
+    "url": "http://localhost:3001",
     "version": "1.0.0",
     "database": "JSON-NoSQL",
     "endpoints": [
       "/health",
-      "/items",
-      "/items/:id",
-      "/categories",
+      "/auth/register",
+      "/auth/login",
+      "/users",
       "/search"
     ],
-    "registeredAt": "2025-09-27T22:10:35.268Z",
-    "lastHealthCheck": "2025-09-27T23:52:06.836Z",
+    "registeredAt": "2025-09-28T13:00:56.520Z",
+    "lastHealthCheck": "2025-09-28T14:33:57.932Z",
     "healthy": true
   }
 }
